@@ -1,0 +1,21 @@
+version: "3"
+services:
+  webapp:
+    build: .
+    command: node app/app.js
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - "5000:5000"
+    depends_on:
+      - pgdatabase
+    environment:
+      DATABASE_URL: postgres://postgres:pgpassword@pgdatabase:5432/todos
+  pgdatabase:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: todos
+    ports:
+      - "5432:5432"
