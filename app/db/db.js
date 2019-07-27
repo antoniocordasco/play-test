@@ -71,5 +71,6 @@ const addFrame = async (playerId, firstShot, secondShot) => {
 
 module.exports = {
   createGame,
+  addFrame,
   healthcheck
 };
