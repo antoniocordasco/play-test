@@ -20,7 +20,7 @@ const dbTestQuery = async () => {
     console.log("teststststst");
     console.log(res);
 
-    res = await client.query('SELECT * FROM games;');
+    res = await client.query('SELECT * FROM frames;');
     console.log("testst2");
     console.log(res);
 
