@@ -13,12 +13,9 @@ CREATE TABLE IF NOT EXISTS frames (
     first_shot INTEGER,
     second_shot INTEGER
 );
-
 INSERT INTO games (game_description) VALUES ('fake game');
-
 INSERT INTO players (game_id, nickname) VALUES (1, 'Antonio');
 INSERT INTO players (game_id, nickname) VALUES (1, 'Giuseppe');
-
 INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 1, 0);
 INSERT INTO frames (player_id, first_shot, second_shot) VALUES (2, 8, 0);
 INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 2, 2);

@@ -1,19 +1,22 @@
 const express = require('express');
-const db = require('./db/db').todos;
-const dbTestQuery = require('./db/db').dbTestQuery;
+const dbHealthcheckQuery = require('./db/db').dbHealthcheckQuery;
 // Set up the express app
 const app = express();
 // get all todos
-app.get('/api/v1/todos', async (req, res) => {
+app.get('/api/v1/db-healthcheck', async (req, res) => {
+  let healthcheck = await dbHealthcheckQuery();
 
-  let testVar = await dbTestQuery();
-
-  res.status(200).send({
-    success: 'true',
-    message: 'todos retrieved successfully',
-    todos: db,
-    testMsg: testVar
-  })
+  if (healthcheck) { 
+    res.status(200).send({
+      success: 'true',
+      message: 'The database is set up correctly'
+    });
+  } else { 
+    res.status(500).send({
+      success: 'false',
+      message: 'The database is either down or not set up correctly'
+    });
+  }
 });
 const PORT = 5000;
 
