@@ -1,9 +1,14 @@
 const { Client } = require('pg');
 
-const healthcheck = async () => {
-  const client = new Client({
+const getClient = () => {
+  return new Client({
     connectionString: process.env.DATABASE_URL
   });
+}
+
+const healthcheck = async () => {
+  const client = getClient();
+
   try {
     await client.connect();
   
@@ -16,9 +21,8 @@ const healthcheck = async () => {
 }
 
 const createGame = async (description, player1, player2) => {
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL
-  });
+  const client = getClient();
+
   try {
     await client.connect();
 
