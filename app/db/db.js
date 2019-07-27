@@ -48,6 +48,20 @@ const createGame = async (description, player1, player2) => {
   return false;
 }
 
+const addFrame = async (playerId, firstShot, secondShot) => {
+  const client = getClient();
+
+  try {
+    await client.connect();
+
+
+    return false
+  } catch(error) {
+    console.error(error);
+  }
+  return false;
+}
+
 module.exports = {
   createGame,
   healthcheck
