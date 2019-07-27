@@ -73,7 +73,10 @@ const addFrame = async (playerId, firstShot, secondShot) => {
     }
     await client.connect();
 
-
+    // inserting players
+    const insertQuery = 'INSERT INTO frames (player_id, first_shot, second_shot) VALUES($1, $2, $3) RETURNING *';
+    const res = await client.query(insertQuery, [playerId, firstShot, secondShot]);
+    
     return true
   } catch(error) {
     console.error(error);

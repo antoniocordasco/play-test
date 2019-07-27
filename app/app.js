@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 
 const createGame = require('./db/db').createGame;
+const addFrame = require('./db/db').addFrame;
 const dbHealthcheck = require('./db/db').healthcheck;
 // Set up the express app
 const app = express();
@@ -44,6 +45,20 @@ app.post('/api/v1/start-game', async (req, res) => {
   res.status(200).send({
     success: 'true',
     game
+  });
+});
+
+app.post('/api/v1/add-frame', async (req, res) => {
+  const description = req.body.description;
+  const playerId = req.body.playerId;
+  const firstShot = req.body.firstShot;
+  const secondShot = req.body.secondShot;
+
+  const frame = await addFrame(playerId, firstShot, secondShot);
+
+  res.status(200).send({
+    success: 'true',
+    frame
   });
 });
 
