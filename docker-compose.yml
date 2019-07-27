@@ -1,6 +1,6 @@
 version: "3"
 services:
-  webapp:
+  web:
     build: .
     command: node app/app.js
     volumes:
@@ -9,10 +9,10 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - pgdatabase
+      - db
     environment:
-      DATABASE_URL: postgres://postgres:pgpassword@pgdatabase:5432/todos
-  pgdatabase:
+      DATABASE_URL: postgres://postgres:pgpassword@db:5432/todos
+  db:
     image: postgres:11.3
     ports:
       - "5432:5432"
