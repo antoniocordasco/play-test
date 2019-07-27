@@ -14,9 +14,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-const PORT = 5000;
-
-app.listen(PORT, () => {
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 5000;
+}
+app.listen(port, () => {
   console.log(`server running on port ${PORT}`)
 });
 
