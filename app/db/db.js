@@ -25,10 +25,12 @@ const initialize = async () => {
 
   try {
     await client.connect();
+    var res;
 
     for (var i in statements) {
 
-      await client.query(statements[i]);
+      res = await client.query(statements[i]);
+      console.log(res);
     }   
     return true;
   } catch(error) {
