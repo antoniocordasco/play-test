@@ -6,13 +6,55 @@ const getClient = () => {
   });
 }
 
+const initialize = async () => {
+  const client = getClient();
+
+  var statements = [
+    'CREATE TABLE IF NOT EXISTS games (id SERIAL PRIMARY KEY NOT NULL, game_description VARCHAR(50))',
+    'CREATE TABLE IF NOT EXISTS players (id SERIAL PRIMARY KEY NOT NULL, game_id INTEGER, nickname VARCHAR(50))',
+    'CREATE TABLE IF NOT EXISTS frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)',
+    'DELETE FROM games',
+    'DELETE FROM players',
+    'DELETE FROM frames',
+    'INSERT INTO games (id, game_description) VALUES (1, \'first game\')',
+    'INSERT INTO players (id, game_id, nickname) VALUES (1, 1, \'Antonio\'), (2, 1, \'Giuseppe\')',
+    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0)',
+    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (2, 1, 1), (2, 7, 3), (2, 1, 2), (2, 10, 0), (2, 8, 1), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0)',
+  ];
+  var statements = [
+    'CREATE TABLE IF NOT EXISTS games (id SERIAL PRIMARY KEY NOT NULL, game_description VARCHAR(50))',
+    'CREATE TABLE IF NOT EXISTS players (id SERIAL PRIMARY KEY NOT NULL, game_id INTEGER, nickname VARCHAR(50))',
+    'CREATE TABLE IF NOT EXISTS frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)'
+  ];
+
+
+  try {
+    await client.connect();
+    await client.query(statements[0]);
+    await client.query(statements[1]);
+    await client.query(statements[2]);
+    
+
+    return true;
+  } catch(error) {
+    console.error(error);
+  }
+  return false;
+}
+
 const healthcheck = async () => {
   const client = getClient();
 
   try {
     await client.connect();
   
+    initialize();
+   // res = await client.query('SELECT * FROM frames');
+   // console.log(res);
+
     var res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
+    console.log(res);
+
     return res.rowCount === 3;
   } catch(error) {
     console.error(error);
@@ -84,22 +126,6 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   return false;
 }
 
-const calculateScoreFromFrames = (frames) => {
-  var currentFrame = null;
-  for (var i = 0; i < 10; i++) {
-    currentFrame = frames[i];
-    frames[i].score = parseInt(frames[i].first_shot) + parseInt(frames[i].second_shot);
-  }
-
-  var total = 0;
-  for (var i = 0; i < 10; i++) {
-    total += frames[i].score;
-  }
-
-  return total;
-}
-
-
 const getPlayerFrames = async (playerId) => {
   const client = getClient();
 
@@ -110,7 +136,6 @@ const getPlayerFrames = async (playerId) => {
 
     await client.connect();
 
-    // inserting players
     const selectQuery = 'SELECT first_shot, second_shot FROM frames WHERE player_id = $1 ORDER BY id ASC';
     const res = await client.query(selectQuery, [playerId]);
     
@@ -120,8 +145,6 @@ const getPlayerFrames = async (playerId) => {
   }
   return false;
 }
-
-
 
 module.exports = {
   createGame,
