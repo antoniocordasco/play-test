@@ -19,7 +19,7 @@ if (port == null || port == "") {
   port = 5000;
 }
 app.listen(port, () => {
-  console.log(`server running on port ${PORT}`)
+  console.log(`server running on port ${port}`)
 });
 
 app.get('/api/v1/db-healthcheck', async (req, res) => {
