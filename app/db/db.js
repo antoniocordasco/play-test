@@ -4,7 +4,7 @@ const todos =  [
     {
       id: 1,
       title: "lunch",
-      description: "Go for lunc by 2pm"
+      description: "Go for lunch by 2pm"
     }
 ];
 
@@ -15,8 +15,15 @@ const dbTestQuery = async () => {
   });
   try {
     await client.connect();
-  const res = await client.query('SELECT $1::text as message', ['Hello world!']);
-  console.log(res.rows[0].message); // Hello world!
+  
+    var res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
+    console.log("teststststst");
+    console.log(res);
+
+    res = await client.query('SELECT * FROM games;');
+    console.log("testst2");
+    console.log(res);
+
     await client.end();
   }
   catch(error) {

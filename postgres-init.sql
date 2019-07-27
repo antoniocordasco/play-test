@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS games (id integer PRIMARY KEY NOT NULL,  score integer );
