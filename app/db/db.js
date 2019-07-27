@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 
-const dbHealthcheckQuery = async () => {
+const healthcheck = async () => {
   const client = new Client({
     connectionString: process.env.DATABASE_URL
   });
@@ -15,6 +15,36 @@ const dbHealthcheckQuery = async () => {
   return false;
 }
 
+const createGame = async (description, player1, player2) => {
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL
+  });
+  try {
+    await client.connect();
+
+    // inserting game
+    var res = await client.query('INSERT INTO games (game_description) VALUES($1) RETURNING *', [description]);
+    const gameId = res.rows[0].id;
+
+    // inserting players
+    const playersInsertQuery = 'INSERT INTO players (game_id, nickname) VALUES($1, $2) RETURNING *';
+    res = await client.query(playersInsertQuery, [gameId, player1]);
+    const player1Id = res.rows[0].id;
+    res = await client.query(playersInsertQuery, [gameId, player2]);
+    const player2Id = res.rows[0].id;
+
+    return {
+      gameId,
+      player1Id,
+      player2Id
+    };
+  } catch(error) {
+    console.error(error);
+  }
+  return false;
+}
+
 module.exports = {
-  dbHealthcheckQuery
+  createGame,
+  healthcheck
 };
