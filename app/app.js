@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 
 const createGame = require('./db/db').createGame;
 const addFrame = require('./db/db').addFrame;
+const getPlayerFrames = require('./db/db').getPlayerFrames;
 const dbHealthcheck = require('./db/db').healthcheck;
 // Set up the express app
 const app = express();
@@ -49,7 +50,6 @@ app.post('/api/v1/start-game', async (req, res) => {
 });
 
 app.post('/api/v1/add-frame', async (req, res) => {
-  const description = req.body.description;
   const playerId = req.body.playerId;
   const firstShot = req.body.firstShot;
   const secondShot = req.body.secondShot;
@@ -57,8 +57,55 @@ app.post('/api/v1/add-frame', async (req, res) => {
   const frame = await addFrame(playerId, firstShot, secondShot);
 
   res.status(200).send({
-    success: 'true',
-    frame
+    success: 'true'
   });
 });
 
+const calculateScoreFromFrames = (frames) => {
+  var currentFrame = null;
+  for (var i = 0; i < 10; i++) {
+    currentFrame = frames[i];
+    frames[i].score = parseInt(frames[i].first_shot) + parseInt(frames[i].second_shot);
+
+    // strike
+    if (parseInt(frames[i].first_shot) === 10) {
+      if (parseInt(frames[i+1].first_shot) === 10) {
+
+        // we need to be defensive here because this function can be used to calculate partial scores as well
+        if (typeof frames[i+1] != 'undefined') {
+          frames[i].score += parseInt(frames[i+1].first_shot);
+          if (typeof frames[i+2] != 'undefined') {
+            frames[i].score += parseInt(frames[i+2].first_shot);
+          }
+        }
+      } else {
+        if (typeof frames[i+1] != 'undefined') {
+          frames[i].score += parseInt(frames[i+1].first_shot) + parseInt(frames[i+1].second_shot);
+        }
+      }
+
+    // spare  
+    } else if (parseInt(frames[i].first_shot) + parseInt(frames[i].second_shot) === 10) {
+      frames[i].score += parseInt(frames[i+1].first_shot);
+    }
+  }
+
+  var total = 0;
+  for (var i = 0; i < 10; i++) {
+    total += frames[i].score;
+  }
+
+  return total;
+}
+
+app.get('/api/v1/player-score/:playerId', async (req, res) => {
+  const playerId = req.params.playerId;
+  const frames = await getPlayerFrames(playerId);
+  const score = calculateScoreFromFrames(frames);
+
+  res.status(200).send({
+    success: 'true',
+    frames,
+    score
+  });
+});

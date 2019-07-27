@@ -84,8 +84,48 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   return false;
 }
 
+const calculateScoreFromFrames = (frames) => {
+  var currentFrame = null;
+  for (var i = 0; i < 10; i++) {
+    currentFrame = frames[i];
+    frames[i].score = parseInt(frames[i].first_shot) + parseInt(frames[i].second_shot);
+  }
+
+  var total = 0;
+  for (var i = 0; i < 10; i++) {
+    total += frames[i].score;
+  }
+
+  return total;
+}
+
+
+const getPlayerFrames = async (playerId) => {
+  const client = getClient();
+
+  try {
+    if (playerId === null || typeof playerId === 'undefined' || parseInt(playerId) < 1) {
+        throw new Error("Invalid player id");
+    }
+
+    await client.connect();
+
+    // inserting players
+    const selectQuery = 'SELECT first_shot, second_shot FROM frames WHERE player_id = $1 ORDER BY id ASC';
+    const res = await client.query(selectQuery, [playerId]);
+    
+    return res.rows;
+  } catch(error) {
+    console.error(error);
+  }
+  return false;
+}
+
+
+
 module.exports = {
   createGame,
   addFrame,
+  getPlayerFrames,
   healthcheck
 };
