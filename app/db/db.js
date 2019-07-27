@@ -59,10 +59,22 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   const client = getClient();
 
   try {
+    if (firstShot === null || typeof firstShot === 'undefined') {
+        throw new Error("The first shot is not defined");
+    }
+    if (parseInt(firstShot) + parseInt(secondShot) > 10) {
+        throw new Error("Total between 2 shots greater than 10");
+    }
+    if (parseInt(firstShot) < 10 && (secondShot === null || typeof secondShot === 'undefined')) {
+        throw new Error("Not a strike, but missing second shot");
+    }
+    if (parseInt(firstShot) < 0 || parseInt(secondShot) < 0) {
+        throw new Error("Shots cannot be lower than 0");
+    }
     await client.connect();
 
 
-    return false
+    return true
   } catch(error) {
     console.error(error);
   }

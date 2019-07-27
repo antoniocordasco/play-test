@@ -65,6 +65,12 @@ describe('db', function() {
         var check2 = await addFrame(1, 10, null);
         expect(check2).to.equal(true);
 
+        var check3 = await addFrame(1, 9, 0);
+        expect(check3).to.equal(true);
+
+        var check1 = await addFrame(1, 7, 4);
+        expect(check1).to.equal(false);
+
         var check3 = await addFrame(1, 9, null);
         expect(check3).to.equal(false);
 
