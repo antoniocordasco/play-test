@@ -111,7 +111,7 @@ const calculateScoreFromFrames = (frames) => {
 
     // strike
     if (parseInt(frames[i].first_shot) === 10) {
-      if (parseInt(frames[i+1].first_shot) === 10) {
+      if (typeof frames[i+1] != 'undefined' && parseInt(frames[i+1].first_shot) === 10) {
 
         // we need to be defensive here because this function can be used to calculate partial scores as well
         if (typeof frames[i+1] != 'undefined') {
