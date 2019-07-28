@@ -106,9 +106,7 @@ router.post('/api/v1/add-frame', async (req, res) => {
 // Private function to calculate the score, given an array of frames
 // It works only on incomplete sets of frames
 const calculateScoreFromFrames = (frames) => {
-  var currentFrame = null;
   for (var i = 0; i < 10; i++) {
-    currentFrame = frames[i];
     frames[i].score = parseInt(frames[i].first_shot) + parseInt(frames[i].second_shot);
 
     // strike

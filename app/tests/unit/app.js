@@ -7,14 +7,3 @@ describe('app', function() {
         done();
     });
 });
-/*
-describe('GET /app/v1/db-healthcheck', function() { return;
-    it('responds with json', function(done) {
-      request(router)
-        .get('/app/v1/db-healthcheck')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(200, done);
-    });
-});
-*/

@@ -98,8 +98,6 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   }
 
   const existingFrames = await getPlayerFrames(playerId);
-  console.log(existingFrames);
-
   if (existingFrames.length > 11) {
     throw new Error("A game cannot have more than 12 frames");
   } else if (existingFrames.length === 11 && existingFrames[9].first_shot != 10) {
@@ -158,7 +156,7 @@ const getPlayerFrames = async (playerId) => {
 
     const selectQuery = 'SELECT first_shot, second_shot FROM frames WHERE player_id = $1 ORDER BY id ASC';
     const res = await client.query(selectQuery, [playerId]);
-        
+       
     return res.rows;
   } catch(error) {
     console.error(error);

@@ -13,7 +13,8 @@ var mochaAsync = (fn) => {
 describe('db', function() {
     before(function(){
         mockery.enable({
-            warnOnUnregistered: false
+            warnOnUnregistered: false,
+            useCleanCache: true
         });        
     });
 
@@ -38,7 +39,7 @@ describe('db', function() {
         const dbHealthcheck = require('../../../db/db').healthcheck;
         const healthcheckRes = await dbHealthcheck();
 
-        expect(healthcheckRes).to.equal(true);
+        expect(healthcheckRes).to.equal(true);   
         return;
     }));
 
@@ -50,15 +51,17 @@ describe('db', function() {
                 return true;
             }
             query() {
-                return true
+                return { rows: [] };
             }
         }        
+        mockery.resetCache();
         mockery.registerMock('pg', {
             Client: Client
         });
 
         // we need to require the DB access function after the mocks have been set
         const addFrame = require('../../../db/db').addFrame;
+        mockery.resetCache();
         var check1 = await addFrame(1, 7, 3);
         expect(check1).to.equal(true);
 
@@ -88,11 +91,12 @@ describe('db', function() {
             var check6 = false;
         }
         expect(check6).to.equal(false);
-        
+
         return;
     }));
 
-    after(function(){        
+    after(function(){   
+        mockery.deregisterAll();     
         mockery.disable();        
     });
 });

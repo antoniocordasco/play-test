@@ -1,4 +1,4 @@
-var expect  = require('chai').expect;
+const expect  = require('chai').expect;
 const request = require('supertest');
 const router = require('../../router');
 
@@ -38,8 +38,6 @@ describe('End to end game logic testing', function() {
     });
   });
 
-
-
   /*
   This is almost a perfect game, only 1 pin is missed at the 12th shot.
   The input is almost always the same, but it is set each time so that it can be changed to test other scenarios quickly
@@ -48,9 +46,6 @@ describe('End to end game logic testing', function() {
     request(router.app).post(startUrl).send({description: 'test game', player1: 'test player 1'}).end(function(err, res) {
       const plId = res.body.game.player1Id;
       const gameId = res.body.game.gameId;
-
-      console.log('gameId');
-      console.log(gameId);
 
       let input = {playerId: plId, firstShot: '10', secondShot: '0'};
       request(router.app).post(addUrl).send(input).end(function(err, res) {    
@@ -109,8 +104,5 @@ describe('End to end game logic testing', function() {
     });
   });
 });
-
-
-
 
 router.server.close();
