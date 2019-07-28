@@ -81,3 +81,6 @@ The initialization of the DB should be done as part of the build, by docker, usi
 - Database credentials
 The database credentials are checked on github, in the docker-compose.yml file. This is not a problem because they are the ones for local development.
 If there was a production build, we would need to add a file with the credentials for the production database, which is not pushed to either github or docker, to avoid security risks.
+
+- Code style
+I have not used any linter, but there are plenti available. It would be a good idea to install one, to ensure consistency throughout the codebase
