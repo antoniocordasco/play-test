@@ -68,14 +68,27 @@ describe('db', function() {
         var check3 = await addFrame(1, 9, 0);
         expect(check3).to.equal(true);
 
-        var check1 = await addFrame(1, 7, 4);
-        expect(check1).to.equal(false);
-
-        var check3 = await addFrame(1, 9, null);
-        expect(check3).to.equal(false);
-
-        var check4 = await addFrame(1, null, null);
+        try {
+            var check4 = await addFrame(1, 7, 4); 
+        } catch {
+            var check4 = false;
+        }
         expect(check4).to.equal(false);
+
+        try {
+            var check5 = await addFrame(1, 9, null); 
+        } catch {
+            var check5 = false;
+        }
+        expect(check5).to.equal(false);
+
+        try {
+            var check6 = await addFrame(1, null, null); 
+        } catch {
+            var check6 = false;
+        }
+        expect(check6).to.equal(false);
+        
         return;
     }));
 

@@ -28,7 +28,6 @@ const initialize = async () => {
 
     for (var i in statements) {
       res = await client.query(statements[i]);
-    //  console.log(res);
     }   
     console.error("Initialization succeeded.");
     return true;
@@ -42,15 +41,9 @@ const initialize = async () => {
 const healthcheck = async () => {
   const client = getClient();
 
-  try {
-    await client.connect();
-    res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
-
-    return res.rowCount === 3;
-  } catch(error) {
-    console.error(error);
-  }
-  return false;
+  await client.connect();
+  res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
+  return res.rowCount === 3;
 }
 
 const createGame = async (description, player1, player2) => {
@@ -122,9 +115,6 @@ const getGame = async (gameId) => {
     await client.connect();
     const res = await client.query('SELECT * FROM players WHERE game_id = $1 ORDER BY id ASC', [gameId]);
 
-    console.log('test1');
-    console.log(res.rows);
-    
     if (res.rowCount === 0) {
       throw new Error("No players found for game: " + gameId);
     } else if (res.rowCount === 1) {
@@ -162,9 +152,6 @@ const getPlayerFrames = async (playerId) => {
     const selectQuery = 'SELECT first_shot, second_shot FROM frames WHERE player_id = $1 ORDER BY id ASC';
     const res = await client.query(selectQuery, [playerId]);
         
-    console.log('test2');
-    console.log(res.rows);
-
     return res.rows;
   } catch(error) {
     console.error(error);

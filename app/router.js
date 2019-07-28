@@ -30,17 +30,24 @@ router.get('/api/v1/hello', async (req, res) => {
 });
 
 router.get('/api/v1/db-healthcheck', async (req, res) => {
-  let healthcheck = await dbHealthcheck();
-
-  if (healthcheck) { 
-    res.status(200).send({
-      success: 'true',
-      message: 'The database is set up correctly'
-    });
-  } else { 
+  try {  
+    let healthcheck = await dbHealthcheck();
+  
+    if (healthcheck) { 
+      res.status(200).send({
+        success: 'true',
+        message: 'The database is set up correctly'
+      });
+    } else { 
+      res.status(500).send({
+        success: 'false',
+        message: 'The database is either down or not set up correctly'
+      });
+    }
+  } catch(error) {
     res.status(500).send({
       success: 'false',
-      message: 'The database is either down or not set up correctly'
+      message: error.message
     });
   }
 });
@@ -83,8 +90,6 @@ router.post('/api/v1/add-frame', async (req, res) => {
       success: 'true'
     });
   } catch(error) {
-    console.log('test4');
-    console.log(error);
     res.status(500).send({
       success: 'false',
       message: error.message
