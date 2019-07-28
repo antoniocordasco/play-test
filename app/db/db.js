@@ -22,18 +22,18 @@ const initialize = async () => {
     'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (2, 1, 1), (2, 7, 3), (2, 1, 2), (2, 10, 0), (2, 8, 1), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0)',
   ];
 
-
   try {
     await client.connect();
     var res;
 
     for (var i in statements) {
-
       res = await client.query(statements[i]);
       console.log(res);
     }   
+    console.error("Initialization succeeded.");
     return true;
   } catch(error) {
+    console.error("Database not ready yet...");
     console.error(error);
   }
   return false;
@@ -140,6 +140,7 @@ const getPlayerFrames = async (playerId) => {
 }
 
 module.exports = {
+  initialize,
   createGame,
   addFrame,
   getPlayerFrames,

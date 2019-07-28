@@ -2,7 +2,7 @@ version: "3"
 services:
   web:
     build: .
-    command: node app/app.js
+    command: node app/initialize.js && node app/app.js
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules
