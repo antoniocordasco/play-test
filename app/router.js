@@ -169,11 +169,20 @@ router.get('/api/v1/game/:gameId', async (req, res) => {
     const game = await getGame(gameId);
   
     game.player1.frames = await getPlayerFrames(game.player1.id);
-    game.player1.score = calculateScoreFromFrames(game.player1.frames);
+    if (game.player1.frames.length > 0) {
+      game.player1.score = calculateScoreFromFrames(game.player1.frames);
+    } else {
+      game.player1.score = 0;
+    }
   
     if (typeof game.player2 != 'undefined') {
       game.player2.frames = await getPlayerFrames(game.player2.id);
-      game.player2.score = calculateScoreFromFrames(game.player2.frames);
+
+      if (game.player2.frames.length > 0) {
+        game.player2.score = calculateScoreFromFrames(game.player2.frames);
+      } else {
+        game.player2.score = 0;
+      }
     }
   
     res.status(200).send({
@@ -182,6 +191,7 @@ router.get('/api/v1/game/:gameId', async (req, res) => {
     });
 
   } catch(error) {
+    console.log(error)
     res.status(500).send({
       success: 'false',
       message: error.message
