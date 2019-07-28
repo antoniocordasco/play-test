@@ -145,36 +145,50 @@ const calculateScoreFromFrames = (frames) => {
 // GET endpoint get a player's score
 // Accepts playerId
 router.get('/api/v1/player-score/:playerId', async (req, res) => {
-  const playerId = req.params.playerId;
-  const frames = await getPlayerFrames(playerId);
-  const score = calculateScoreFromFrames(frames);
-
-  res.status(200).send({
-    success: 'true',
-    frames,
-    score
-  });
+  try {
+    const playerId = req.params.playerId;
+    const frames = await getPlayerFrames(playerId);
+    const score = calculateScoreFromFrames(frames);
+  
+    res.status(200).send({
+      success: 'true',
+      frames,
+      score
+    });
+  } catch(error) {
+    res.status(500).send({
+      success: 'false',
+      message: error.message
+    });
+  }
 });
 
 // GET endpoint get a game, with all its frames and scores
 // Accepts gameId
 router.get('/api/v1/game/:gameId', async (req, res) => {
-  const gameId = req.params.gameId;
+  try {
+    const gameId = req.params.gameId;
+    const game = await getGame(gameId);
+  
+    game.player1.frames = await getPlayerFrames(game.player1.id);
+    game.player1.score = calculateScoreFromFrames(game.player1.frames);
+  
+    if (typeof game.player2 != 'undefined') {
+      game.player2.frames = await getPlayerFrames(game.player2.id);
+      game.player2.score = calculateScoreFromFrames(game.player2.frames);
+    }
+  
+    res.status(200).send({
+      success: 'true',
+      game
+    });
 
-  const game = await getGame(gameId);
-
-  game.player1.frames = await getPlayerFrames(game.player1.id);
-  game.player1.score = calculateScoreFromFrames(game.player1.frames);
-
-  if (typeof game.player2 != 'undefined') {
-    game.player2.frames = await getPlayerFrames(game.player2.id);
-    game.player2.score = calculateScoreFromFrames(game.player2.frames);
+  } catch(error) {
+    res.status(500).send({
+      success: 'false',
+      message: error.message
+    });
   }
-
-  res.status(200).send({
-    success: 'true',
-    game
-  });
 });
 
 module.exports = { 
