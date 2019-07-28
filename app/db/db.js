@@ -119,6 +119,41 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   return false;
 }
 
+const getGame = async (gameId) => {
+  const client = getClient();
+
+  try {
+    if (gameId === null || typeof gameId === 'undefined' || parseInt(gameId) < 1) {
+        throw new Error("Invalid game id");
+    }
+    await client.connect();
+    const res = await client.query('SELECT * FROM players WHERE game_id = $1 ORDER BY id ASC', [gameId]);
+
+
+    if (res.rowCount === 0) {
+      throw new Error("No players found for game: " + gameId);
+    } else if (res.rowCount === 1) {
+      return {
+        gameId,
+        player1: res.rows[0]
+      };
+    } else if (res.rowCount === 2) {
+      return {
+        gameId,
+        player1: res.rows[0],
+        player2: res.rows[1]
+      };
+    } else {
+      throw new Error("More than 2 players found for game: " + gameId);
+    }
+    
+    return game;
+  } catch(error) {
+    console.error(error);
+  }
+  return false;
+}
+
 const getPlayerFrames = async (playerId) => {
   const client = getClient();
 
@@ -142,6 +177,7 @@ const getPlayerFrames = async (playerId) => {
 module.exports = {
   initialize,
   createGame,
+  getGame,
   addFrame,
   getPlayerFrames,
   healthcheck

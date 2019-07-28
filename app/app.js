@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const createGame = require('./db/db').createGame;
 const addFrame = require('./db/db').addFrame;
 const getPlayerFrames = require('./db/db').getPlayerFrames;
+const getGame = require('./db/db').getGame;
 const dbHealthcheck = require('./db/db').healthcheck;
 const initialize = require('./db/db').initialize;
 
@@ -112,5 +113,25 @@ app.get('/api/v1/player-score/:playerId', async (req, res) => {
     success: 'true',
     frames,
     score
+  });
+});
+
+
+app.get('/api/v1/game/:gameId', async (req, res) => {
+  const gameId = req.params.gameId;
+
+  const game = await getGame(gameId);
+
+  game.player1.frames = await getPlayerFrames(game.player1.id);
+  game.player1.score = calculateScoreFromFrames(game.player1.frames);
+
+  if (typeof game.player2 != 'undefined') {
+    game.player2.frames = await getPlayerFrames(game.player2.id);
+    game.player2.score = calculateScoreFromFrames(game.player2.frames);
+  }
+
+  res.status(200).send({
+    success: 'true',
+    game
   });
 });
