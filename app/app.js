@@ -8,6 +8,6 @@ const initializeDBAndRouting = () => {
 }
 
 // need to wait until the DB container is ready to accept connections
-setTimeout(initializeDBAndRouting, 3000);
+setTimeout(initializeDBAndRouting, 10000);
 
 module.exports = app;
