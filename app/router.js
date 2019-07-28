@@ -83,6 +83,8 @@ router.post('/api/v1/add-frame', async (req, res) => {
       success: 'true'
     });
   } catch(error) {
+    console.log('test4');
+    console.log(error);
     res.status(500).send({
       success: 'false',
       message: error.message
