@@ -16,6 +16,7 @@ describe('db', function() {
             warnOnUnregistered: false,
             useCleanCache: true
         });        
+        mockery.warnOnReplace(false);
     });
 
     it('Testing healthcheck DB function', mochaAsync(async function(done) {
@@ -61,7 +62,6 @@ describe('db', function() {
 
         // we need to require the DB access function after the mocks have been set
         const addFrame = require('../../../db/db').addFrame;
-        mockery.resetCache();
         var check1 = await addFrame(1, 7, 3);
         expect(check1).to.equal(true);
 
@@ -92,6 +92,47 @@ describe('db', function() {
         }
         expect(check6).to.equal(false);
 
+        return;
+    }));
+
+    it('Testing addFrame when we cannot add any more frames', mochaAsync(async function(done) {
+        // mocking DB client
+        class Client {
+            connect() {
+                return true;
+            }
+            query() {
+                return { 
+                    rows: [
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0},
+                        {first_shot: 0, second_shot: 0}
+                    ] 
+                };
+            }
+        }        
+        mockery.resetCache();
+        mockery.registerMock('pg', {
+            Client: Client
+        });
+
+        // we need to require the DB access function after the mocks have been set
+        const addFrame = require('../../../db/db').addFrame;
+
+        try {
+            var check1 = await addFrame(1, 7, 3);
+            assert.fail(0, 1, 'Error not thrown');
+            
+        } catch (error) {
+            expect(error.message).to.equal('Trying to add an 11th frame, when the 10th frame was neither a strike or a spare');
+        }
         return;
     }));
 
