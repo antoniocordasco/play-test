@@ -11,7 +11,6 @@ describe('Test that the API is up', function() {
   });
 });
 
-
 describe('Test the database healthcheck', function() {
   it('responds with json', function(done) {
     request(router.app)
@@ -20,6 +19,21 @@ describe('Test the database healthcheck', function() {
     .expect(200, done);
   });
 });
+
+
+
+
+describe('Test starting a game', function() {
+  it('responds with json', function(done) {
+    request(router.app)
+    .post('/api/v1/start-game')
+    .send({description: 'test game', player1: 'test player'})
+    .set('Accept', 'application/json')
+    .expect(200, done);
+  });
+});
+
+
 
 
 router.server.close();

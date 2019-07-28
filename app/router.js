@@ -46,16 +46,29 @@ router.get('/api/v1/db-healthcheck', async (req, res) => {
 });
 
 router.post('/api/v1/start-game', async (req, res) => {
-  const description = req.body.description;
-  const player1 = req.body.player1;
-  const player2 = req.body.player2;
+  try {    
+    if (typeof req.body.player1 ==='undefined') {
+      throw new Error("You must provide the name for the player 1");
+    }
 
-  const game = await createGame(description, player1, player2);
+    if (typeof req.body.description ==='undefined') {
+      throw new Error("You must provide a description for the game");
+    }
 
-  res.status(200).send({
-    success: 'true',
-    game
-  });
+    const description = req.body.description;
+    const player1 = req.body.player1;
+    const player2 = req.body.player2;
+    const game = await createGame(description, player1, player2);
+    res.status(200).send({
+      success: 'true',
+      game
+    });
+  } catch(error) {
+    res.status(500).send({
+      success: 'false',
+      message: error.message
+    });
+  }
 });
 
 router.post('/api/v1/add-frame', async (req, res) => {
