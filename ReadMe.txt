@@ -59,3 +59,23 @@ To get a player's score. This method will also return the list of frames in the 
 
 GET  /api/v1/game/:gameId
 To get the full data of a specific game. It will return the scores and also all the frames for each player.
+
+
+LIMITATIONS AND POSSIBLE IMPROVEMENTS:
+This is the implementation of a simple API for a technical test, not a production ready system. Therefore it has many limitations.
+
+- Docker set up:
+The Docker set up is probably not the best. It uses docker-compose locally, wich a container called e2e, which is built with the sole purpose of running the end to end tests.
+On Heroku, the docker-compose.yml file is not being used, so the end to end tests are not running there.
+A good improvement would be to set up a proper CI pipeline, linked to github, that builds the app, runs the tests and then deploys.
+
+- Automated testing:
+The system has got some unit tests and some end to end/integration tests. They are working correctly, but they are not exhaustive. A lot of the logic is not currently covered by the tests.
+In fact there are certain "illegal" situation that are allowed by the system at the moment. For example, it is possible to add 13 or more frames to a single player. This should not be allowed.
+Now that the basis for the tests is set up, it would be a good idea to write tests for all of these cases and watch them fail. It should then be pretty straightforward to add checks in the code so that the tests pass.
+Another problem is that the tests are not stopping the build when there are failures.
+
+- Database initialization
+The database is being initialized by node, rather than through an .sql script which is run by docker at startup. This is not ideal for many reasons. 
+Probably the most glaring one is the fact that a setTimeout() has been used so that the PostgreSQL database has got enough time to be ready to accept calls.
+The initialization of the DB should be done as part of the build, by docker, using some bespoke logic that waits for the DB to be callable, before building the web and e2e containers.
