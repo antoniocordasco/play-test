@@ -22,6 +22,7 @@ const server = router.listen(port, () => {
   console.log(`server running on port ${port}`)
 });
 
+// simple endpoint to check if the app is running
 router.get('/api/v1/hello', async (req, res) => {
   res.status(200).send({
     success: 'true',
@@ -29,6 +30,7 @@ router.get('/api/v1/hello', async (req, res) => {
   });
 });
 
+// simple endpoint to check if the database is set up correctly
 router.get('/api/v1/db-healthcheck', async (req, res) => {
   try {  
     let healthcheck = await dbHealthcheck();
@@ -52,6 +54,8 @@ router.get('/api/v1/db-healthcheck', async (req, res) => {
   }
 });
 
+// POST endpoint to create a new game
+// Accepts description, player1, player2 (optional)
 router.post('/api/v1/start-game', async (req, res) => {
   try {    
     if (typeof req.body.player1 ==='undefined') {
@@ -78,6 +82,8 @@ router.post('/api/v1/start-game', async (req, res) => {
   }
 });
 
+// POST endpoint to add a frame to an existing game
+// Accepts playerId, firstShot, secondShot)
 router.post('/api/v1/add-frame', async (req, res) => {
   try {    
     const playerId = req.body.playerId;
@@ -97,6 +103,8 @@ router.post('/api/v1/add-frame', async (req, res) => {
   }
 });
 
+// Private function to calculate the score, given an array of frames
+// It works only on incomplete sets of frames
 const calculateScoreFromFrames = (frames) => {
   var currentFrame = null;
   for (var i = 0; i < 10; i++) {
@@ -134,6 +142,8 @@ const calculateScoreFromFrames = (frames) => {
   return total;
 }
 
+// GET endpoint get a player's score
+// Accepts playerId
 router.get('/api/v1/player-score/:playerId', async (req, res) => {
   const playerId = req.params.playerId;
   const frames = await getPlayerFrames(playerId);
@@ -146,7 +156,8 @@ router.get('/api/v1/player-score/:playerId', async (req, res) => {
   });
 });
 
-
+// GET endpoint get a game, with all its frames and scores
+// Accepts gameId
 router.get('/api/v1/game/:gameId', async (req, res) => {
   const gameId = req.params.gameId;
 
