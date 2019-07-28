@@ -1,5 +1,17 @@
 version: "3"
 services:
+  e2e:
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    build: 
+      context: .
+      dockerfile: Dockerfile.e2e
+    depends_on:
+      - web
+    command: npm run test-e2e
+    environment:
+      DATABASE_URL: postgres://postgres:pgpassword@db:5432/todos
   web:
     build: .
     command: node app/app.js

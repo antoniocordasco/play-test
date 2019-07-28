@@ -35,7 +35,7 @@ describe('db', function() {
         });
 
         // we need to require the DB access function after the mocks have been set
-        const dbHealthcheck = require('../../db/db').healthcheck;
+        const dbHealthcheck = require('../../../db/db').healthcheck;
         const healthcheckRes = await dbHealthcheck();
 
         expect(healthcheckRes).to.equal(true);
@@ -58,7 +58,7 @@ describe('db', function() {
         });
 
         // we need to require the DB access function after the mocks have been set
-        const addFrame = require('../../db/db').addFrame;
+        const addFrame = require('../../../db/db').addFrame;
         var check1 = await addFrame(1, 7, 3);
         expect(check1).to.equal(true);
 

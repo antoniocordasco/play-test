@@ -44,8 +44,6 @@ const healthcheck = async () => {
 
   try {
     await client.connect();
-  
-    initialize();
     res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
 
     return res.rowCount === 3;
