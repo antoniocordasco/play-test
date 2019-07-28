@@ -30,6 +30,14 @@ const initialize = async () => {
       res = await client.query(statements[i]);
     }   
     console.log("Initialization succeeded.");
+
+
+    res = await client.query('SELECT * FROM games');
+    console.log(res.rows);
+    res = await client.query('SELECT * FROM players');
+    console.log(res.rows);
+
+
     return true;
   } catch(error) {
     console.error("Database not ready yet...");
