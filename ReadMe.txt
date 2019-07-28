@@ -79,3 +79,7 @@ Another problem is that the tests are not stopping the build when there are fail
 The database is being initialized by node, rather than through an .sql script which is run by docker at startup. This is not ideal for many reasons. 
 Probably the most glaring one is the fact that a setTimeout() has been used so that the PostgreSQL database has got enough time to be ready to accept calls.
 The initialization of the DB should be done as part of the build, by docker, using some bespoke logic that waits for the DB to be callable, before building the web and e2e containers.
+
+- Database credentials
+The database credentials are checked on github, in the docker-compose.yml file. This is not a problem because they are the ones for local development.
+If there was a production build, we would need to add a file with the credentials for the production database, which is not pushed to either github or docker, to avoid security risks.
