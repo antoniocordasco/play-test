@@ -9,7 +9,7 @@ docker-compose build && docker-compose up
 - Calling the application locally
 Let's suppose we want to create a new game, with 1 player, who knocked all 10 pins on all the 12 shots (perfect game). At the end we want to also retrieve the data for this game to make sure it has been saved correctly.
 To do so we need to open postman and do a POST request to http://localhost:5000/api/v1/start-game
-In the "body" tab, select x-www-form-urlencoded and add the variables: description, player1. Note down the gameId and player1Id variables returned by the endpoint.
+In the "body" tab, select x-www-form-urlencoded and add the variables: description, player1 (these are arbitrary and do not matter too much). Note down the gameId and player1Id variables returned by the endpoint.
 Now we need to add 12 frames, by doing 12 POST requests to http://localhost:5000/api/v1/add-frame
 Same as before, but we need to provide these variables: 
 playerId: what was returned as player1Id in the previous POST request
