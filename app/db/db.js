@@ -10,12 +10,12 @@ const initialize = async () => {
   const client = getClient();
 
   var statements = [
-    'CREATE TABLE IF NOT EXISTS games (id SERIAL PRIMARY KEY NOT NULL, game_description VARCHAR(50))',
-    'CREATE TABLE IF NOT EXISTS players (id SERIAL PRIMARY KEY NOT NULL, game_id INTEGER, nickname VARCHAR(50))',
-    'CREATE TABLE IF NOT EXISTS frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)',
-    'DELETE FROM games',
-    'DELETE FROM players',
-    'DELETE FROM frames',
+    'DROP TABLE IF EXISTS games',
+    'DROP TABLE IF EXISTS players',
+    'DROP TABLE IF EXISTS frames',
+    'CREATE TABLE games (id SERIAL PRIMARY KEY NOT NULL, game_description VARCHAR(50))',
+    'CREATE TABLE players (id SERIAL PRIMARY KEY NOT NULL, game_id INTEGER, nickname VARCHAR(50))',
+    'CREATE TABLE frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)',
     'INSERT INTO games (id, game_description) VALUES (1, \'first game\')',
     'INSERT INTO players (id, game_id, nickname) VALUES (1, 1, \'Antonio\'), (2, 1, \'Giuseppe\')',
     'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 0, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0)',
@@ -29,7 +29,7 @@ const initialize = async () => {
     for (var i in statements) {
       res = await client.query(statements[i]);
     }   
-    console.error("Initialization succeeded.");
+    console.log("Initialization succeeded.");
     return true;
   } catch(error) {
     console.error("Database not ready yet...");
