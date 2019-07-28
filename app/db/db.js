@@ -91,30 +91,25 @@ const createGame = async (description, player1, player2) => {
 const addFrame = async (playerId, firstShot, secondShot) => {
   const client = getClient();
 
-  try {
-    if (firstShot === null || typeof firstShot === 'undefined') {
-        throw new Error("The first shot is not defined");
-    }
-    if (parseInt(firstShot) + parseInt(secondShot) > 10) {
-        throw new Error("Total between 2 shots greater than 10");
-    }
-    if (parseInt(firstShot) < 10 && (secondShot === null || typeof secondShot === 'undefined')) {
-        throw new Error("Not a strike, but missing second shot");
-    }
-    if (parseInt(firstShot) < 0 || parseInt(secondShot) < 0) {
-        throw new Error("Shots cannot be lower than 0");
-    }
-    await client.connect();
-
-    // inserting players
-    const insertQuery = 'INSERT INTO frames (player_id, first_shot, second_shot) VALUES($1, $2, $3) RETURNING *';
-    const res = await client.query(insertQuery, [playerId, firstShot, secondShot]);
-    
-    return true
-  } catch(error) {
-    console.error(error);
+  if (firstShot === null || typeof firstShot === 'undefined') {
+      throw new Error("The first shot is not defined");
   }
-  return false;
+  if (parseInt(firstShot) + parseInt(secondShot) > 10) {
+      throw new Error("Total between 2 shots greater than 10");
+  }
+  if (parseInt(firstShot) < 10 && (secondShot === null || typeof secondShot === 'undefined')) {
+      throw new Error("Not a strike, but missing second shot");
+  }
+  if (parseInt(firstShot) < 0 || parseInt(secondShot) < 0) {
+      throw new Error("Shots cannot be lower than 0");
+  }
+  await client.connect();
+
+  // inserting players
+  const insertQuery = 'INSERT INTO frames (player_id, first_shot, second_shot) VALUES($1, $2, $3) RETURNING *';
+  const res = await client.query(insertQuery, [playerId, firstShot, secondShot]);
+  
+  return true;
 }
 
 const getGame = async (gameId) => {

@@ -72,15 +72,22 @@ router.post('/api/v1/start-game', async (req, res) => {
 });
 
 router.post('/api/v1/add-frame', async (req, res) => {
-  const playerId = req.body.playerId;
-  const firstShot = req.body.firstShot;
-  const secondShot = req.body.secondShot;
-
-  const frame = await addFrame(playerId, firstShot, secondShot);
-
-  res.status(200).send({
-    success: 'true'
-  });
+  try {    
+    const playerId = req.body.playerId;
+    const firstShot = req.body.firstShot;
+    const secondShot = req.body.secondShot;
+  
+    const frame = await addFrame(playerId, firstShot, secondShot);
+  
+    res.status(200).send({
+      success: 'true'
+    });
+  } catch(error) {
+    res.status(500).send({
+      success: 'false',
+      message: error.message
+    });
+  }
 });
 
 const calculateScoreFromFrames = (frames) => {
