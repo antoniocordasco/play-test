@@ -18,7 +18,7 @@ const initialize = async () => {
     'DELETE FROM frames',
     'INSERT INTO games (id, game_description) VALUES (1, \'first game\')',
     'INSERT INTO players (id, game_id, nickname) VALUES (1, 1, \'Antonio\'), (2, 1, \'Giuseppe\')',
-    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0)',
+    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 0, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0)',
     'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (2, 1, 0), (2, 7, 3), (2, 1, 2), (2, 10, 0), (2, 8, 1), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0)',
   ];
 

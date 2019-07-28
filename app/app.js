@@ -5,6 +5,12 @@ const createGame = require('./db/db').createGame;
 const addFrame = require('./db/db').addFrame;
 const getPlayerFrames = require('./db/db').getPlayerFrames;
 const dbHealthcheck = require('./db/db').healthcheck;
+const initialize = require('./db/db').initialize;
+
+console.log('Initializing app...');
+// need to wait until the DB container is ready to accept connections
+setTimeout(initialize, 3000);
+
 // Set up the express app
 const app = express();
 
