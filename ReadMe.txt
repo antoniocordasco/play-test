@@ -83,4 +83,4 @@ The database credentials are checked on github, in the docker-compose.yml file. 
 If there was a production build, we would need to add a file with the credentials for the production database, which is not pushed to either github or docker, to avoid security risks.
 
 - Code style
-I have not used any linter, but there are plenti available. It would be a good idea to install one, to ensure consistency throughout the codebase
+I have not used any linter, but there are plenty available. It would be a good idea to install one, to ensure consistency throughout the codebase
