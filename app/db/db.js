@@ -27,8 +27,11 @@ const initialize = async () => {
     }   
     console.log("Initialization succeeded.");
 
+    client.end();
     return true;
   } catch(error) {
+
+    client.end();
     console.error("Database not ready yet...");
     console.error(error);
   }
@@ -40,6 +43,8 @@ const healthcheck = async () => {
 
   await client.connect();
   res = await client.query('SELECT table_name  FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\'');
+
+  client.end();
   return res.rowCount === 3;
 }
 
@@ -61,6 +66,8 @@ const createGame = async (description, player1, player2) => {
     if (player2) {
       res = await client.query(playersInsertQuery, [gameId, player2]);
       const player2Id = res.rows[0].id;
+
+      client.end();
       return {
         gameId,
         player1Id,
@@ -68,11 +75,14 @@ const createGame = async (description, player1, player2) => {
       };
     }
 
+    client.end();
     return {
       gameId,
       player1Id
     };
   } catch(error) {
+
+    client.end();
     console.error(error);
   }
   return false;
@@ -109,6 +119,7 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   const insertQuery = 'INSERT INTO frames (player_id, first_shot, second_shot) VALUES($1, $2, $3) RETURNING *';
   const res = await client.query(insertQuery, [playerId, firstShot, secondShot]);
   
+  client.end();
   return true;
 }
 
@@ -121,6 +132,7 @@ const getGame = async (gameId) => {
   await client.connect();
   const res = await client.query('SELECT * FROM players WHERE game_id = $1 ORDER BY id ASC', [gameId]);
 
+  client.end();
   if (res.rowCount === 0) {
     throw new Error("No players found for game: " + gameId);
   } else if (res.rowCount === 1) {
@@ -153,7 +165,8 @@ const getPlayerFrames = async (playerId) => {
 
     const selectQuery = 'SELECT first_shot, second_shot FROM frames WHERE player_id = $1 ORDER BY id ASC';
     const res = await client.query(selectQuery, [playerId]);
-       
+
+    client.end();
     return res.rows;
   } catch(error) {
     console.error(error);

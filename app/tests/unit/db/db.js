@@ -26,6 +26,9 @@ describe('db', function() {
             connect() {
                 return true;
             }
+            end() {
+                return true;
+            }
             query() {
                 return {
                     rowCount: 3
@@ -49,6 +52,9 @@ describe('db', function() {
         // mocking DB client
         class Client {
             connect() {
+                return true;
+            }
+            end() {
                 return true;
             }
             query() {
@@ -99,6 +105,9 @@ describe('db', function() {
         // mocking DB client
         class Client {
             connect() {
+                return true;
+            }
+            end() {
                 return true;
             }
             query() {
