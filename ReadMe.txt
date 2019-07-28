@@ -70,10 +70,8 @@ On Heroku, the docker-compose.yml file is not being used, so the end to end test
 A good improvement would be to set up a proper CI pipeline, linked to github, that builds the app, runs the tests and then deploys.
 
 - Automated testing:
-The system has got some unit tests and some end to end/integration tests. They are working correctly, but they are not exhaustive. A lot of the logic is not currently covered by the tests.
-In fact there are certain "illegal" situation that are allowed by the system at the moment. For example, it is possible to add 13 or more frames to a single player. This should not be allowed.
-Now that the basis for the tests is set up, it would be a good idea to write tests for all of these cases and watch them fail. It should then be pretty straightforward to add checks in the code so that the tests pass.
-Another problem is that the tests are not stopping the build when there are failures.
+The system has got some unit tests and some end to end/integration tests. They are working correctly, and they are a good starting point. 
+But they are not exhaustive. A lot of the logic is not currently covered by the tests. For the system to be production ready, it would need to have better test coverage.
 
 - Database initialization
 The database is being initialized by node, rather than through an .sql script which is run by docker at startup. This is not ideal for many reasons. 

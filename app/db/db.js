@@ -96,6 +96,18 @@ const addFrame = async (playerId, firstShot, secondShot) => {
   if (parseInt(firstShot) < 0 || parseInt(secondShot) < 0) {
       throw new Error("Shots cannot be lower than 0");
   }
+
+  const existingFrames = await getPlayerFrames(playerId);
+  console.log(existingFrames);
+
+  if (existingFrames.length > 11) {
+    throw new Error("A game cannot have more than 12 frames");
+  } else if (existingFrames.length === 11 && existingFrames[9].first_shot != 10) {
+    throw new Error("Trying to add a 12th frame, when the 10th frame was not a strike");
+  } else if (existingFrames.length === 10 && existingFrames[9].first_shot + existingFrames[9].second_shot  != 10) {
+    throw new Error("Trying to add an 11th frame, when the 10th frame was neither a strike or a spare");
+  }
+
   await client.connect();
 
   // inserting players
@@ -153,6 +165,7 @@ const getPlayerFrames = async (playerId) => {
   }
   return false;
 }
+
 
 module.exports = {
   initialize,
