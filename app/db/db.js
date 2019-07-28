@@ -15,11 +15,7 @@ const initialize = async () => {
     'DROP TABLE IF EXISTS frames',
     'CREATE TABLE games (id SERIAL PRIMARY KEY NOT NULL, game_description VARCHAR(50))',
     'CREATE TABLE players (id SERIAL PRIMARY KEY NOT NULL, game_id INTEGER, nickname VARCHAR(50))',
-    'CREATE TABLE frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)',
-    'INSERT INTO games (id, game_description) VALUES (1, \'first game\')',
-    'INSERT INTO players (id, game_id, nickname) VALUES (1, 1, \'Antonio\'), (2, 1, \'Giuseppe\')',
-    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 0, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0), (1, 10, 0)',
-    'INSERT INTO frames (player_id, first_shot, second_shot) VALUES (2, 1, 0), (2, 7, 3), (2, 1, 2), (2, 10, 0), (2, 8, 1), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0), (2, 0, 0)',
+    'CREATE TABLE frames (id SERIAL PRIMARY KEY NOT NULL, player_id INTEGER NOT NULL, first_shot INTEGER, second_shot INTEGER)'
   ];
 
   try {
@@ -30,13 +26,6 @@ const initialize = async () => {
       res = await client.query(statements[i]);
     }   
     console.log("Initialization succeeded.");
-
-
-    res = await client.query('SELECT * FROM games');
-    console.log(res.rows);
-    res = await client.query('SELECT * FROM players');
-    console.log(res.rows);
-
 
     return true;
   } catch(error) {
